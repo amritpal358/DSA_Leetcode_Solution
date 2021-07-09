@@ -1,0 +1,81 @@
+import java.util.*;
+
+class Main
+{
+    public static int find(int dp[],int x){
+        if(x==dp[x]){
+            return x;
+        }
+        int temp=find(dp,dp[x]);
+        dp[x]=temp;
+        return temp;
+    }
+    public static void union(int dp[],int x,int y){
+        int px=find(dp,x);
+        int py=find(dp,y);
+        if(px!=py){
+            dp[px]=py;
+        }
+    }
+	public static void main(String[] args)
+	{
+	    Scanner scan =new Scanner(System.in);
+	    int n=scan.nextInt();
+	    int m=scan.nextInt();
+	    int dp[]=new int[m*n];
+	    for(int lot=0;lot<dp.length;lot++){
+	        dp[lot]=lot;
+	    }
+	    int mat[][]=new int[n][m];
+	    int count=0;
+	    int query=scan.nextInt();
+	    for(int i=0;i<query;i++){
+	        int x=scan.nextInt();
+	        int y=scan.nextInt();
+	        mat[x][y]=1;
+	        int cellno=(x*m)+y;
+	        count+=1;
+	        if(x-1>=0 && mat[x-1][y]==1){
+	            x=x-1;
+	            int cellno1=(x*m)+y;
+	            System.out.println(cellno+"================1  "+cellno1);
+	            if(find(dp,cellno1)!=find(dp,cellno)){
+	                union(dp,cellno,cellno1);
+	                count-=1;
+	            }
+	        }
+	        if(x+1<mat.length && mat[x+1][y]==1){
+	            int cellno1=((x+1)*m)+y;
+	            System.out.println(cellno+"================2 "+cellno1);
+	            if(find(dp,cellno1)!=find(dp,cellno)){
+	                union(dp,cellno,cellno1);
+	                count-=1;
+	            }
+	        }
+	        if(y-1>=0 && mat[x][y-1]==1){
+	            int cellno1=(x*m)+(y-1);
+	            System.out.println(cellno+"================3   "+cellno1);
+	            if(find(dp,cellno1)!=find(dp,cellno)){
+	                union(dp,cellno,cellno1);
+	                count-=1;
+	            }
+	        }
+	        if(y+1>mat[0].length && mat[x][y+1]==1){
+	            int cellno1=(x*m)+(y+1);
+	            System.out.println(cellno+"================4  "+cellno1);
+	            if(find(dp,cellno1)!=find(dp,cellno)){
+	                union(dp,cellno,cellno1);
+	                count-=1;
+	            }
+	        }
+	        for(int j=0;j<mat.length;j++){
+	            for(int u=0;u<mat[0].length;u++){
+	                System.out.print(mat[j][u]);
+	            }
+	            System.out.println();
+	        }
+	        System.out.println(count);
+	        
+	    }
+	}
+}
